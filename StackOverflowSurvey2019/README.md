@@ -13,4 +13,4 @@ The data used comes from the [Stack Overflow Annual Developer Survey](https://in
 Bacause of the large size of data, I couldn't upload it to the repository. But you can download it [here](https://drive.google.com/open?id=1QOmVDpd8hcVYqqUXDXf68UMDWQZP0wQV).
 
 ## Conclusions and related article
-I've posted the analysis progress [here](https://medium.com/@weixiao917/what-made-high-income-programmers-759808ec5593)
+I've posted the analysis in [medium](https://medium.com/@weixiao917/what-made-high-income-programmers-759808ec5593)
