@@ -1,3 +1,6 @@
+"""
+flask framework
+"""
 import json
 import plotly
 import pandas as pd
@@ -12,10 +15,15 @@ from plotly.graph_objs import Pie
 from sklearn.externals import joblib
 from sqlalchemy import create_engine
 
-
 app = Flask(__name__)
 
+
 def tokenize(text):
+    """
+    tokenize the text
+    :param text:
+    :return:
+    """
     tokens = word_tokenize(text)
     lemmatizer = WordNetLemmatizer()
 
@@ -25,6 +33,7 @@ def tokenize(text):
         clean_tokens.append(clean_tok)
 
     return clean_tokens
+
 
 # load data
 engine = create_engine('sqlite:///../data/DisasterResponse.db')
@@ -38,9 +47,11 @@ model = joblib.load("../models/classifier.pkl")
 @app.route('/')
 @app.route('/index')
 def index():
-    
+    """
+    entrance page
+    :return:
+    """
     # extract data needed for visuals
-    # TODO: Below is an example - modify to extract data for your own visuals
     related = ['related', 'other']
     related_count = [df['related'].sum(), df['related'].count()]
     medical_help = ['medical_help', 'other']
@@ -48,7 +59,6 @@ def index():
     genre_counts = df.groupby('genre').count()['message']
     genre_names = list(genre_counts.index)
     # create visuals
-    # TODO: Below is an example - modify to create your own visuals
     graphs = [
         {
             'data': [
@@ -71,16 +81,16 @@ def index():
                 )
             ],
             'layout': {
-                'title':'medical help'
+                'title': 'medical help'
             }
         },
         {
             'data': [
-                 {
+                {
                     'x': genre_names,
                     'y': genre_counts,
-                    'type' : 'bar'
-                 }
+                    'type': 'bar'
+                }
             ],
 
             'layout': {
@@ -94,11 +104,11 @@ def index():
             }
         }
     ]
-    
+
     # encode plotly graphs in JSON
     ids = ["graph-{}".format(i) for i, _ in enumerate(graphs)]
     graphJSON = json.dumps(graphs, cls=plotly.utils.PlotlyJSONEncoder)
-    
+
     # render web page with plotly graphs
     return render_template('master.html', ids=ids, graphJSON=graphJSON)
 
@@ -106,14 +116,18 @@ def index():
 # web page that handles user query and displays model results
 @app.route('/go')
 def go():
+    """
+    query page
+    :return:
+    """
     # save user input in query
-    query = request.args.get('query', '') 
+    query = request.args.get('query', '')
 
     # use model to predict classification for query
     classification_labels = model.predict([query])[0]
     classification_results = dict(zip(df.columns[4:], classification_labels))
 
-    # This will render the go.html Please see that file. 
+    # This will render the go.html Please see that file.
     return render_template(
         'go.html',
         query=query,
@@ -122,6 +136,10 @@ def go():
 
 
 def main():
+    """
+    main entrance
+    :return:
+    """
     app.run(host='0.0.0.0', port=3001, debug=True)
 
 
