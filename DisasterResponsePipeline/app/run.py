@@ -8,6 +8,7 @@ from nltk.tokenize import word_tokenize
 from flask import Flask
 from flask import render_template, request, jsonify
 from plotly.graph_objs import Bar
+from plotly.graph_objs import Pie
 from sklearn.externals import joblib
 from sqlalchemy import create_engine
 
@@ -30,7 +31,7 @@ engine = create_engine('sqlite:///../data/DisasterResponse.db')
 df = pd.read_sql_table('InsertTableName', engine)
 
 # load model
-model = joblib.load("../models/classifier_sim.pkl")
+model = joblib.load("../models/classifier.pkl")
 
 
 # index webpage displays cool visuals and receives user input text for model
@@ -40,18 +41,46 @@ def index():
     
     # extract data needed for visuals
     # TODO: Below is an example - modify to extract data for your own visuals
+    related = ['related', 'other']
+    related_count = [df['related'].sum(), df['related'].count()]
+    medical_help = ['medical_help', 'other']
+    medical_help_count = [df['medical_help'].sum(), df['medical_help'].count()]
     genre_counts = df.groupby('genre').count()['message']
     genre_names = list(genre_counts.index)
-    
     # create visuals
     # TODO: Below is an example - modify to create your own visuals
     graphs = [
         {
             'data': [
-                Bar(
-                    x=genre_names,
-                    y=genre_counts
+                dict(
+                    labels=related,
+                    values=related_count,
+                    type='pie'
                 )
+            ],
+            'layout': {
+                'title': 'related'
+            }
+        },
+        {
+            'data': [
+                dict(
+                    labels=medical_help,
+                    values=medical_help_count,
+                    type='pie'
+                )
+            ],
+            'layout': {
+                'title':'medical help'
+            }
+        },
+        {
+            'data': [
+                 {
+                    'x': genre_names,
+                    'y': genre_counts,
+                    'type' : 'bar'
+                 }
             ],
 
             'layout': {

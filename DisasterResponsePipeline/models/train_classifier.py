@@ -1,3 +1,6 @@
+"""
+train model
+"""
 import sys
 from sqlalchemy import create_engine
 import pandas as pd
@@ -17,6 +20,11 @@ import nltk
 nltk.download(['punkt', 'wordnet'])
 
 def load_data(database_filepath):
+    """
+    load data from database
+    :param database_filepath:
+    :return:
+    """
     engine = create_engine('sqlite:///' + database_filepath)
     df = pd.read_sql_table('InsertTableName', con = engine)
     X = df['message']
@@ -24,6 +32,11 @@ def load_data(database_filepath):
     return(X, Y, Y.columns)
 
 def tokenize(text):
+    """
+    tokenize the messages
+    :param text:
+    :return:
+    """
     tokens = word_tokenize(text)
     lemmatizer = WordNetLemmatizer()
 
@@ -36,6 +49,10 @@ def tokenize(text):
 
 
 def build_model():
+    """
+    training
+    :return:
+    """
     pipeline = Pipeline([
         ('vect', CountVectorizer(tokenizer=tokenize)),
         ('tfidf', TfidfTransformer()),
@@ -55,6 +72,14 @@ def build_model():
 
 
 def evaluate_model(model, X_test, Y_test, category_names):
+    """
+    evaluate the model
+    :param model:
+    :param X_test:
+    :param Y_test:
+    :param category_names:
+    :return:
+    """
     Y_pred = model.predict(X_test)
     for index in range(0, len(category_names)):
         print(category_names[index])
@@ -62,10 +87,20 @@ def evaluate_model(model, X_test, Y_test, category_names):
 
 
 def save_model(model, model_filepath):
+    """
+    save model to file
+    :param model:
+    :param model_filepath:
+    :return:
+    """
     pickle.dump(model, open(model_filepath, 'wb'))
 
 
 def main():
+    """
+    main entrance
+    :return:
+    """
     if len(sys.argv) == 3:
         database_filepath, model_filepath = sys.argv[1:]
         print('Loading data...\n    DATABASE: {}'.format(database_filepath))

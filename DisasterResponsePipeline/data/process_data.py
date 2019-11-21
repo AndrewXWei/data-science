@@ -1,7 +1,16 @@
+"""
+pre-processing
+"""
 import sys
 from sqlalchemy import create_engine
 import pandas as pd
 def load_data(messages_filepath, categories_filepath):
+    """
+    load the data from csv files
+    :param messages_filepath:
+    :param categories_filepath:
+    :return:
+    """
     messages = pd.read_csv(messages_filepath)
     categories = pd.read_csv(categories_filepath)
     df = messages.merge(categories, on='id', how='outer')
@@ -9,6 +18,11 @@ def load_data(messages_filepath, categories_filepath):
 
 
 def clean_data(df):
+    """
+    clean the data
+    :param df:
+    :return:
+    """
     categories = df['categories'].str.split(';', expand=True)
     row = categories.iloc[0]
     category_colnames = row.apply(lambda x: x[:-2])
@@ -25,11 +39,21 @@ def clean_data(df):
 
 
 def save_data(df, database_filename):
+    """
+    save data to database
+    :param df:
+    :param database_filename:
+    :return:
+    """
     engine = create_engine('sqlite:///' + database_filename)
     df.to_sql('InsertTableName', engine, index=False)  
 
 
 def main():
+    """
+    main entrance
+    :return:
+    """
     if len(sys.argv) == 4:
 
         messages_filepath, categories_filepath, database_filepath = sys.argv[1:]

@@ -14,4 +14,8 @@ This project will include a web app where an emergency worker can input a new me
 
 3. Go to http://0.0.0.0:3001/
 
-![main page](imgs/enter.jpg)
+## Entrance
+![main page](imgs/enter1.jpg)
+![main page](imgs/enter2.jpg)
+## Query results
+![main page](imgs/queryrets.jpg)
