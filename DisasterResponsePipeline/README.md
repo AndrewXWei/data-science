@@ -1,6 +1,7 @@
 # Disaster Response Pipeline Project
+This project will include a web app where an emergency worker can input a new message and get classification results in several categories. The web app will also display visualizations of the data.
 
-### Instructions:
+## Instructions:
 1. Run the following commands in the project's root directory to set up your database and model.
 
     - To run ETL pipeline that cleans data and stores in database
@@ -12,3 +13,5 @@
     `python run.py`
 
 3. Go to http://0.0.0.0:3001/
+
+![main page](imgs/enter.jpg)
